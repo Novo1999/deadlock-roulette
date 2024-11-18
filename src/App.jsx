@@ -73,8 +73,6 @@ function App() {
         style={{ width: '300px', height: 'auto' }}
       />
       <div>
-        <button onClick={() => setHeroNum((heroNum + 1) % heroes.length)}>Next Hero</button>
-        <button onClick={() => setHeroNum((heroNum - 1 + heroes.length) % heroes.length)}>Previous Hero</button>
         <button onClick={handleRandomHero}>Random Hero</button>
       </div>
     </div>
