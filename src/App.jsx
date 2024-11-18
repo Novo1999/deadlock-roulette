@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 
 // Import all images one by one
@@ -56,9 +56,12 @@ function App() {
 
   const handleRandomHero = () => {
     let randomIndex;
+
+    // Keep generating random numbers until it's different from the current one
     do {
       randomIndex = Math.floor(Math.random() * heroes.length);
-    } while (randomIndex === heroNum); 
+    } while (randomIndex === heroNum);
+
     setHeroNum(randomIndex);
   };
 
@@ -70,6 +73,8 @@ function App() {
         style={{ width: '300px', height: 'auto' }}
       />
       <div>
+        <button onClick={() => setHeroNum((heroNum + 1) % heroes.length)}>Next Hero</button>
+        <button onClick={() => setHeroNum((heroNum - 1 + heroes.length) % heroes.length)}>Previous Hero</button>
         <button onClick={handleRandomHero}>Random Hero</button>
       </div>
     </div>
