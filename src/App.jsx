@@ -51,10 +51,15 @@ const heroes = [
   yamato,
 ];
 
+// Helper function to create a delay
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 function App() {
   const [heroNum, setHeroNum] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  const handleRandomHero = () => {
+  const handleRandomHero = async () => {
+    setLoading(true); // Show loader
     let randomIndex;
 
     // Keep generating random numbers until it's different from the current one
@@ -62,18 +67,27 @@ function App() {
       randomIndex = Math.floor(Math.random() * heroes.length);
     } while (randomIndex === heroNum);
 
+    await sleep(1000); // Wait for 1 second
     setHeroNum(randomIndex);
+    setLoading(false); // Hide loader
   };
 
   return (
-    <div>
-      <img
-        src={heroes[heroNum]}
-        alt={`Hero ${heroNum + 1}`}
-        style={{ width: '300px', height: 'auto' }}
-      />
+    <div style={{ textAlign: 'center' }}>
+      {loading ? (
+        // Loader while the image is being updated
+        <div style={{ fontSize: '20px', fontWeight: 'bold' }}>Loading...</div>
+      ) : (
+        <img
+          src={heroes[heroNum]}
+          alt={`Hero ${heroNum + 1}`}
+          style={{ width: '300px', height: 'auto' }}
+        />
+      )}
       <div>
-        <button onClick={handleRandomHero}>Random Hero</button>
+        <button onClick={handleRandomHero} disabled={loading}>
+          Random Hero
+        </button>
       </div>
     </div>
   );
