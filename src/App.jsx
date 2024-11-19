@@ -60,7 +60,7 @@ function App() {
         }
       </div>
       <div className="flex gap-2 items-center mt-16">
-        {playerCount > 1 && <input onChange={e => setAlp(() => e.target.value.length === 0 ? defaultAlp : e.target.value.split(",").join(","))} type="text" className='input input-primary' placeholder='Names First Letter' maxLength={playerCount} />}
+        {playerCount > 1 && <input disabled={isLoading} onChange={e => setAlp(() => e.target.value.length === 0 ? defaultAlp : e.target.value.split(",").join(","))} type="text" className='input input-primary' placeholder='Names First Letter' maxLength={playerCount} />}
         <div className='dropdown'>
           <label
             disabled={isLoading}
