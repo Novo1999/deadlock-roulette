@@ -1,96 +1,88 @@
+import { motion } from 'framer-motion';
 import { useState } from 'react';
 import './App.css';
+import { deadlockLogo, heroes } from './data.js';
 
-// Import all images one by one
-import abrams from './assets/heroes/1 - Abrams.jpg';
-import lash from './assets/heroes/10 - Lash.jpg';
-import mcginnis from './assets/heroes/11 - McGinnis.jpg';
-import mirage from './assets/heroes/12 - Mirage.jpg';
-import moKrill from './assets/heroes/13 - Mo & Krill.jpg';
-import paradox from './assets/heroes/14 - Paradox.jpg';
-import pocket from './assets/heroes/15 - Pocket.jpg';
-import seven from './assets/heroes/16 - Seven.jpg';
-import shiv from './assets/heroes/17 - Shiv.jpg';
-import vindicta from './assets/heroes/18 - Vindicta.jpg';
-import viscous from './assets/heroes/19 - Viscous.jpg';
-import bebop from './assets/heroes/2 - Bebop.jpg';
-import warden from './assets/heroes/20 - Warden.jpg';
-import wraith from './assets/heroes/21 - Wraith.jpg';
-import yamato from './assets/heroes/22 - Yamato.jpg';
-import dynamo from './assets/heroes/3 - Dynamo.jpg';
-import greyTalon from './assets/heroes/4 - Grey Talon.jpg';
-import haze from './assets/heroes/5 - Haze.jpg';
-import infernus from './assets/heroes/6 - Infernus.jpg';
-import ivy from './assets/heroes/7 - Ivy.jpg';
-import kelvin from './assets/heroes/8 - Kelvin.jpg';
-import ladyGeist from './assets/heroes/9 - Lady Geist.jpg';
+const alp = ['a', 'b', 'c', 'd', 'e', 'f']
 
-// Store the imported images in an array
-const heroes = [
-  abrams,
-  bebop,
-  dynamo,
-  greyTalon,
-  haze,
-  infernus,
-  ivy,
-  kelvin,
-  ladyGeist,
-  lash,
-  mcginnis,
-  mirage,
-  moKrill,
-  paradox,
-  pocket,
-  seven,
-  shiv,
-  vindicta,
-  viscous,
-  warden,
-  wraith,
-  yamato,
-];
-
-// Helper function to create a delay
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 function App() {
-  const [heroNum, setHeroNum] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
+  const [playerCount, setPlayerCount] = useState(1);
+  const [randomHeroIndices, setRandomHeroIndices] = useState(null)
 
   const handleRandomHero = async () => {
-    setLoading(true); // Show loader
-    let randomIndex;
+    setIsLoading(true)
+    await sleep(800)
+    setIsLoading(false)
+    setRandomHeroIndices(prev => {
+      const newSet = new Set(prev)
+      if (newSet.size > 0) newSet.clear()
+      while (newSet.size !== playerCount) {
+        let randomIndex = Math.floor(Math.random() * heroes.length)
+        newSet.add(randomIndex)
+      }
+      return newSet
+    })
+  };
 
-    // Keep generating random numbers until it's different from the current one
-    do {
-      randomIndex = Math.floor(Math.random() * heroes.length);
-    } while (randomIndex === heroNum);
+  const handleSelectPlayerCount = (e) => {
+    const count = Number(e.target.innerText);
+    if (!count) return;
 
-    await sleep(1000); // Wait for 1 second
-    setHeroNum(randomIndex);
-    setLoading(false); // Hide loader
+    setPlayerCount(count);
+    setRandomHeroIndices(null)
+    const dropdownContent = document.querySelector(".dropdown-content");
+    dropdownContent.style.display = "none";
   };
 
   return (
-    <div style={{ textAlign: 'center' }}>
-      {loading ? (
-        // Loader while the image is being updated
-        <div style={{ fontSize: '20px', fontWeight: 'bold' }}>Loading...</div>
-      ) : (
-        <img
-          src={heroes[heroNum]}
-          alt={`Hero ${heroNum + 1}`}
-          style={{ width: '300px', height: 'auto' }}
-        />
-      )}
-      <div>
-        <button onClick={handleRandomHero} disabled={loading}>
-          Random Hero
-        </button>
+    <div className='m-auto flex flex-col items-center' style={{ textAlign: 'center' }}>
+      <div className='flex gap-2'>
+        {
+          (randomHeroIndices ? Array.from(randomHeroIndices) : Array(playerCount).fill(0)).map((val, index) => (
+            <motion.div
+              key={index}
+            >
+              <motion.img
+                transition={{ duration: 0.7 }}
+                animate={{ rotateY: isLoading ? 180 : 0 }}
+                src={isLoading ? deadlockLogo : randomHeroIndices && randomHeroIndices.size > 0 ? heroes[val] : heroes[0]}
+                alt={`Hero ${index + 1}`}
+                className='w-36 h-48 object-contain'
+              />
+              <div className="badge badge-primary p-6 text-xl font-bold uppercase mt-2">{alp[index]}</div>
+            </motion.div>
+          ))
+        }
       </div>
+      <div className="dropdown mt-16">
+        <label
+          onClick={() => document.querySelector(".dropdown-content").style.display = "block"}
+          tabIndex="0"
+          role='button'
+          htmlFor="player-count"
+          className='btn m-1 btn-accent'
+        >
+          Player Count
+        </label>
+        <ul
+          onClick={e => handleSelectPlayerCount(e)}
+          tabIndex={0}
+          className="dropdown-content bg-cyan-500 menu rounded-box z-[1] w-52 p-2 shadow text-black"
+          style={{ display: "none" }}
+        >{
+            Array(6).fill(0).map((_, index) => (
+              <li key={index} value={index + 1} className='hover:bg-white rounded-lg'><a>{index + 1}</a></li>
+            ))
+          }
+        </ul>
+      </div>
+      <button onClick={handleRandomHero} className='btn btn-primary mt-4'>Give Random Heroes</button>
     </div>
   );
 }
 
 export default App;
+
