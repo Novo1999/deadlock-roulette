@@ -3,14 +3,16 @@ import { useState } from 'react';
 import './App.css';
 import { deadlockLogo, heroes } from './data.js';
 
-const alp = ['a', 'b', 'c', 'd', 'e', 'f']
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
+
+const defaultAlp = ['a', 'b', 'c', 'd', 'e', 'f']
 
 function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [playerCount, setPlayerCount] = useState(1);
   const [randomHeroIndices, setRandomHeroIndices] = useState(null)
+  const [alp, setAlp] = useState(defaultAlp)
 
   const handleRandomHero = async () => {
     setIsLoading(true)
@@ -58,6 +60,7 @@ function App() {
         }
       </div>
       <div className="flex gap-2 items-center mt-16">
+        {playerCount > 1 && <input onChange={e => setAlp(() => e.target.value.length === 0 ? defaultAlp : e.target.value.split(",").join(","))} type="text" className='input input-primary' placeholder='Names First Letter' maxLength={playerCount} />}
         <div className='dropdown'>
           <label
             disabled={isLoading}
