@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import { deadlockLogo, heroes } from './data.js';
 
@@ -14,19 +14,6 @@ function App() {
   const [randomHeroIndices, setRandomHeroIndices] = useState(null)
   const [alp, setAlp] = useState(defaultAlp)
 
-  useEffect(() => {
-    const pathname = window.location.pathname;
-  
-    if (pathname) {
-      const playerCountString = pathname.split("player_count=")?.[1];
-      const playerCount = Number(playerCountString);
-  
-      if (playerCount && playerCount <= 6) {
-        setPlayerCount(playerCount);
-      }
-    }
-  }, []);
-  
   const handleRandomHero = async () => {
     setIsLoading(true)
     await sleep(800)
@@ -47,9 +34,6 @@ function App() {
     if (!count) return;
 
     setPlayerCount(count);
-    const urlSearchParams = new URLSearchParams()
-    urlSearchParams.set("player_count", count)
-    history.pushState(playerCount, "", urlSearchParams)
     setRandomHeroIndices(null)
     const dropdownContent = document.querySelector(".dropdown-content");
     dropdownContent.style.display = "none";
