@@ -57,29 +57,32 @@ function App() {
           ))
         }
       </div>
-      <div className="dropdown mt-16">
-        <label
-          onClick={() => document.querySelector(".dropdown-content").style.display = "block"}
-          tabIndex="0"
-          role='button'
-          htmlFor="player-count"
-          className='btn m-1 btn-accent'
-        >
-          Player Count
-        </label>
-        <ul
-          onClick={e => handleSelectPlayerCount(e)}
-          tabIndex={0}
-          className="dropdown-content bg-cyan-500 menu rounded-box z-[1] w-52 p-2 shadow text-black"
-          style={{ display: "none" }}
-        >{
-            Array(6).fill(0).map((_, index) => (
-              <li key={index} value={index + 1} className='hover:bg-white rounded-lg'><a>{index + 1}</a></li>
-            ))
-          }
-        </ul>
+      <div className="flex gap-2 items-center mt-16">
+        <div className='dropdown'>
+          <label
+            disabled={isLoading}
+            onClick={() => document.querySelector(".dropdown-content").style.display = "block"}
+            tabIndex="0"
+            role='button'
+            htmlFor="player-count"
+            className='btn m-1 btn-accent'
+          >
+            Player Count: <span className='badge text-white'>{playerCount}</span>
+          </label>
+          <ul
+            onClick={e => handleSelectPlayerCount(e)}
+            tabIndex={0}
+            className="dropdown-content bg-cyan-500 menu rounded-box z-[1] w-52 p-2 shadow text-black"
+            style={{ display: "none" }}
+          >{
+              Array(6).fill(0).map((_, index) => (
+                <li key={index} value={index + 1} className='hover:bg-white rounded-lg'><a>{index + 1}</a></li>
+              ))
+            }
+          </ul>
+        </div>
+        <button disabled={isLoading} onClick={handleRandomHero} className='btn btn-primary'>Give Random Heroes</button>
       </div>
-      <button onClick={handleRandomHero} className='btn btn-primary mt-4'>Give Random Heroes</button>
     </div>
   );
 }
