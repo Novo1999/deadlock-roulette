@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import { deadlockLogo, heroes } from './data.js';
 
@@ -14,6 +14,19 @@ function App() {
   const [randomHeroIndices, setRandomHeroIndices] = useState(null)
   const [alp, setAlp] = useState(defaultAlp)
 
+  useEffect(() => {
+    const pathname = window.location.pathname;
+  
+    if (pathname) {
+      const playerCountString = pathname.split("player_count=")?.[1];
+      const playerCount = Number(playerCountString);
+  
+      if (playerCount && playerCount <= 6) {
+        setPlayerCount(playerCount);
+      }
+    }
+  }, []);
+  
   const handleRandomHero = async () => {
     setIsLoading(true)
     await sleep(800)
@@ -34,14 +47,17 @@ function App() {
     if (!count) return;
 
     setPlayerCount(count);
+    const urlSearchParams = new URLSearchParams()
+    urlSearchParams.set("player_count", count)
+    history.pushState(playerCount, "", urlSearchParams)
     setRandomHeroIndices(null)
     const dropdownContent = document.querySelector(".dropdown-content");
     dropdownContent.style.display = "none";
   };
 
   return (
-    <div className='m-auto flex flex-col items-center' style={{ textAlign: 'center' }}>
-      <div className='flex gap-2'>
+    <div className='m-auto flex flex-col items-center text-center'>
+      <div className='flex gap-2 flex-wrap'>
         {
           (randomHeroIndices ? Array.from(randomHeroIndices) : Array(playerCount).fill(0)).map((val, index) => (
             <motion.div
@@ -59,7 +75,7 @@ function App() {
           ))
         }
       </div>
-      <div className="flex gap-2 items-center mt-16">
+      <div className="flex gap-2 items-center mt-16 flex-wrap">
         {playerCount > 1 && <input disabled={isLoading} onChange={e => setAlp(() => e.target.value.length === 0 ? defaultAlp : e.target.value.split(",").join(","))} type="text" className='input input-primary' placeholder='Names First Letter' maxLength={playerCount} />}
         <div className='dropdown'>
           <label
