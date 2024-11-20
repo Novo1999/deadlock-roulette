@@ -12,7 +12,10 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [playerCount, setPlayerCount] = useState(1);
   const [randomHeroIndices, setRandomHeroIndices] = useState(null)
+  console.log("🚀 ~ App ~ randomHeroIndices:", randomHeroIndices)
   const [alp, setAlp] = useState(defaultAlp)
+  const [lockedHeroes, setLockedHeroes] = useState([])
+  console.log("🚀 ~ App ~ lockedHeroes:", lockedHeroes)
 
   const handleRandomHero = async () => {
     setIsLoading(true)
@@ -39,6 +42,10 @@ function App() {
     dropdownContent.style.display = "none";
   };
 
+  const handleLockedHeroes = (val) => {
+    setLockedHeroes(prev => prev.includes(val) ? prev.filter(item => item !== val) : [...prev, val])
+  }
+
   return (
     <div className='m-auto flex flex-col items-center text-center'>
       <div className='flex gap-2 flex-wrap'>
@@ -46,15 +53,18 @@ function App() {
           (randomHeroIndices ? Array.from(randomHeroIndices) : Array(playerCount).fill(0)).map((val, index) => (
             <motion.div
               key={index}
+              className='relative'
             >
               <motion.img
+                onClick={() => handleLockedHeroes(val)}
                 transition={{ duration: 0.7 }}
                 animate={{ rotateY: isLoading ? 180 : 0 }}
                 src={isLoading ? deadlockLogo : randomHeroIndices && randomHeroIndices.size > 0 ? heroes[val] : heroes[0]}
                 alt={`Hero ${index + 1}`}
-                className='w-36 h-48 object-contain'
+                className={`w-36 h-48 object-contain cursor-pointer hover:filter hover:grayscale ${lockedHeroes.includes(val) ? "filter grayscale" : ""}`}
               />
               <div className="badge badge-primary p-6 text-xl font-bold uppercase mt-2">{alp[index]}</div>
+              {lockedHeroes.includes(val) && <div onClick={() => handleLockedHeroes(val)} className='absolute top-16 left-0 right-0 bottom-0 text-3xl z-[50] m-auto cursor-pointer'>🔒</div>}
             </motion.div>
           ))
         }
