@@ -71,6 +71,7 @@ function App() {
   };
 
   const handleLockedHeroes = (val) => {
+    if(isLoading) return
     playerCount > 1 && !!randomHeroIndices && setLockedHeroes(prev => prev.includes(val) ? prev.filter(item => item !== val) : [...prev, val])
   }
 
