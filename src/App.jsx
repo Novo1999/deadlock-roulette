@@ -15,12 +15,10 @@ function App() {
   const [randomHeroIndices, setRandomHeroIndices] = useState(null)
   const [alp, setAlp] = useState(defaultAlp.join(""))
   const [lockedHeroes, setLockedHeroes] = useState([])
-  console.log("🚀 ~ App ~ lockedHeroes:", lockedHeroes)
   const [widthOfHeroSlots, setWidthOfHeroSlots] = useState("")
   const [history, setHistory] = useState([])
   const [lockingDisabled, setLockingDisabled] = useState(false)
   const historyOfLockedHeroes = useRef(null)
-  console.log(history)
 
   const handleRandomHeroAfterLock = async (heroes) => {
     setIsLoading(true)
