@@ -111,6 +111,7 @@ function App() {
             >
               {playerCount > 1 && randomHeroIndices && !lockingDisabled && <DownArrow fill={lockedHeroes.includes(val) ? "yellow" : "lime"} className={`w-12 absolute bottom-36 left-12 ${randomHeroIndices && !lockedHeroes.includes(val) ? "animate-bounceLow" : ""}`} />}
               <motion.img
+                loading='lazy'
                 onClick={() => handleLockedHeroes(val)}
                 transition={{ duration: 0.7 }}
                 animate={{ rotateY: isLoading && !lockedHeroes.includes(val) ? 180 : 0 }}
@@ -162,7 +163,7 @@ function App() {
                 }
                 else {
                   setLockingDisabled(true)
-                  
+
                   setLockedHeroes(prev => {
                     historyOfLockedHeroes.current = [...prev]
                     return []
@@ -175,6 +176,7 @@ function App() {
                 <div
                   key={item}>
                   <motion.img
+                    loading='lazy'
                     src={heroes[item]}
                     alt={`Hero ${item}`}
                     className="w-12"
