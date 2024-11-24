@@ -98,7 +98,7 @@ function App() {
 
   return (
     <div className='m-auto flex flex-col items-center text-center'>
-      {!!randomHeroIndices && playerCount > 1 && !lockingDisabled && <p className={`absolute top-12 text-2xl bg-white p-1 rounded px-4 ${lockedHeroes.length === playerCount ? "text-red-500" : "text-black"}`}>{lockedHeroes.length === playerCount && !lockingDisabled ? "What's the point of doing this?" : "Hover to Lock Heroes in Place"}</p>}
+      {!!randomHeroIndices && playerCount > 1 && !lockingDisabled && <p className={`absolute top-12 text-2xl bg-white p-1 rounded px-4 ${lockedHeroes.length === playerCount ? "text-red-500" : "text-black"}`}>{lockedHeroes.length === playerCount && !lockingDisabled ? "What's the point of doing this?" : "Click to Lock Heroes in Place"}</p>}
       {playerCount > 1 && <div style={{ width: widthOfHeroSlots, transition: "ease-in", transitionDuration: "0.3s" }} className={`absolute top-32 border-2 border-b`}>
       </div>}
 
