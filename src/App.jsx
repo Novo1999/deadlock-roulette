@@ -127,6 +127,7 @@ function App() {
               disabled={!playerCount}
               onClick={(e) => {
                 const val = e.target.value
+                if(!val) return
                 setPlayerCount(+recentUsedPlayerCountRef.current)
                 handleChangeLetterCombination(val)
               }}
